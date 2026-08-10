@@ -1,0 +1,94 @@
+{
+  "plugin": [
+    "oh-my-openagent@latest"
+  ],
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+        "ollama-lan": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama LAN",
+      "options": {
+        "baseURL": "http://192.168.180.199:8900/v1"
+      },
+      "models": {
+        "qwen2.5-coder:7b": {
+          "name": "Qwen 2.5 Coder 7B"
+        }
+      }
+    }
+  },
+  "skills": {
+    "sources": [
+      "~/.config/opencode/skills"
+    ]
+  },
+  "mcp": {
+    "sqz": {
+      "command": [
+        "/opt/homebrew/bin/sqz-mcp",
+        "--transport",
+        "stdio"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "github": {
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/github"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "enabled": false,
+      "type": "local"
+    },
+    "playwright": {
+      "command": [
+        "/Users/best/.config/opencode/node_modules/.bin/playwright-mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "sequential-thinking": {
+      "command": [
+        "npx",
+        "-y",
+        "@anthropic/mcp-sequential-thinking"
+      ],
+      "enabled": false,
+      "type": "local"
+    },
+    "filesystem": {
+      "command": [
+        "/Users/best/.config/opencode/node_modules/.bin/mcp-server-filesystem",
+        "/Users/best/Library/CloudStorage/OneDrive-OrmesbyPrimary/GitProjects",
+        "/Users/best/Projects",
+        "/Users/best/Projects/local-coding"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "memory": {
+      "command": [
+        "/Users/best/.config/opencode/node_modules/.bin/mcp-server-memory"
+      ],
+      "enabled": true,
+      "type": "local",
+      "env": {
+        "MEMORY_FILE_PATH": "/Users/best/.config/opencode/memory.jsonl"
+      }
+    },
+    "serena": {
+      "command": [
+        "/Users/best/.local/bin/serena",
+        "start-mcp-server",
+        "--transport",
+        "stdio"
+      ],
+      "enabled": true,
+      "type": "local"
+    }
+  }
+}
