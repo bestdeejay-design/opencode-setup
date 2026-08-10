@@ -32,9 +32,10 @@ say "2/5 Устанавливаю MCP-пакеты (playwright, memory, filesyst
 cd "$CONFIG" || exit 1
 if command -v node >/dev/null 2>&1; then
   npm install --no-audit --no-fund
-  if [ -x "$CONFIG/node_modules/.bin/playwright-mcp" ]; then
-    say "    Браузеры Playwright (chromium) — только если нужен браузер"
-    "$CONFIG/node_modules/.bin/playwright-mcp" --version >/dev/null 2>&1 || true
+  if [ -x "$CONFIG/node_modules/.bin/playwright" ]; then
+    say "    Браузеры Playwright (chromium)"
+    "$CONFIG/node_modules/.bin/playwright" install chromium >/dev/null 2>&1 \
+      && say "    chromium установлен" || warn "браузеры не установились (можно позже: playwright install chromium)"
   fi
 else
   warn "node не найден — пропускаю npm-установку (установите Node перед настройкой)"
@@ -78,8 +79,22 @@ printf '  node:        '; command -v node >/dev/null 2>&1 && node --version || w
 printf '  MCP-бинарки: '; ls "$CONFIG"/node_modules/.bin/playwright-mcp "$CONFIG"/node_modules/.bin/mcp-server-memory "$CONFIG"/node_modules/.bin/mcp-server-filesystem 2>/dev/null | wc -l | tr -d ' '
 echo " из 3 на месте"
 
+# ---------- 6. Отдельные инструменты (sqz — сжатие, serena — код) ----------
+say "6/6 Отдельные инструменты (sqz-mcp, serena)"
+if command -v brew >/dev/null 2>&1; then
+  command -v sqz-mcp >/dev/null 2>&1 || { say "    brew install sqz"; brew install sqz >/dev/null 2>&1 && say "    sqz установлен" || warn "sqz не установился — вручную: brew install sqz"; }
+else
+  warn "brew нет — sqz MCP будет недоступен (npm-альтернатива: @sqz/mcp)"
+fi
+if command -v uv >/dev/null 2>&1; then
+  command -v serena >/dev/null 2>&1 || { say "    uv tool install serena-agent"; uv tool install serena-agent >/dev/null 2>&1 && say "    serena установлена" || warn "serena не установилась — вручную: uv tool install serena-agent"; }
+else
+  warn "uv нет — serena будет недоступна (brew install uv; uv tool install serena-agent)"
+fi
+
 printf '\n\033[1;36mГОТОВО. Дальше:\033[0m\n'
 echo "  1. Перезапустить OpenCode (конфиг MCP читается при старте)."
 echo "  2. Авторизация GitHub, если ещё нет:  gh auth login"
 echo "  3. В новом чате сказать: «настрой всё по репозиторию opencode-setup» — агент проверит сам."
 echo "  4. Логи обслуживания: $DATA/maintenance.log"
+echo "  5. Если OneDrive называется иначе — поправить пути в $CONFIG/opencode.jsonc (блок filesystem)."

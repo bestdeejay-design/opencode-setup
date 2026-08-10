@@ -30,6 +30,7 @@
   ```bash
   brew install gh node
   ```
+  Homebrew, если его нет: `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
 
 ### Шаг 1. Установить opencode
 Официальный способ (CLI + desktop):
@@ -59,10 +60,11 @@ bash ~/Projects/opencode-setup/setup.sh
 ```
 Что сделает скрипт (всё с бэкапами существующих файлов):
 1. разложит конфиги в `~/.config/opencode/`;
-2. установит MCP-пакеты (playwright, memory, filesystem) локально в `~/.config/opencode/node_modules`;
+2. установит MCP-пакеты (playwright, memory, filesystem) локально в `~/.config/opencode/node_modules` и браузер chromium;
 3. склонирует скиллы из `bestdeejay-design/agent-skills` (лежат в `~/.config/opencode/skills`) и поставит их зависимости;
 4. скопирует сервис обслуживания базы в `~/.local/share/opencode/` и зарегистрирует в launchd;
-5. покажет проверки (gh, node, MCP-бинарки).
+5. покажет проверки (gh, node, MCP-бинарки);
+6. доустановит отдельные инструменты: `sqz` (сжатие контекста, brew) и `serena` (навигация по коду, uv).
 
 ### Шаг 5. Перезапустить OpenCode
 MCP-серверы читаются при старте — после перезапуска в чате появится полный арсенал.
